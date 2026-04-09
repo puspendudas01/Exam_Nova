@@ -98,15 +98,8 @@ This project is licensed under the MIT License.
 
 ## 📂 Project Structure
 
-Exam_Nova/
-├── backend/
-│   ├── src/
-│   ├── pom.xml
-│   └── ...
-├── frontend/
-│   ├── src/
-│   ├── package.json
-│   └── ...
+<img width="899" height="254" alt="image" src="https://github.com/user-attachments/assets/f25aac36-a383-486d-8b0e-a71d9f34d305" />
+
 
 ## 👨‍💻 Author
 
