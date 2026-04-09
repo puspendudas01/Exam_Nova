@@ -76,12 +76,6 @@ npm start
 
 ---
 
-## 📸 Screenshots
-
-(Add screenshots here later)
-
----
-
 ## 📌 Future Improvements
 
 * AI-based proctoring
