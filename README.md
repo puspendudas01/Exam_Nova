@@ -99,10 +99,14 @@ This project is licensed under the MIT License.
 ## 📂 Project Structure
 
 Exam_Nova/
-│── backend/        # Spring Boot backend
-│── frontend/       # React frontend
-
----
+├── backend/
+│   ├── src/
+│   ├── pom.xml
+│   └── ...
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── ...
 
 ## 👨‍💻 Author
 
