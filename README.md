@@ -20,24 +20,36 @@ Designed for institutions to conduct exams over a local network (LAN) without re
 
 ## 🚀 Features
 
-👨‍🎓 Student
-Register & Login
-Attempt Exams
-Auto-submit on time expiry
-View Results
-Anti-cheating features (tab switch detection, right-click disable)
+**Admin**
+- Platform overview (student, teacher, and subject counts)
+- Approve pending teacher accounts
+- Create and manage subjects
+- Build exam blueprints (subject → question count → marks/negatives)
+- Create and publish exams with scheduled start/end windows
+- View all student results with subject-wise breakdown and violation logs
 
-👩‍🏫 Teacher
-Upload Questions (Subject-wise)
-Manage Question Bank
-View Student Results
+**Teacher**
+- Upload questions manually or via `.xlsx` bulk upload (Apache POI)
+- Browse and manage per-subject question bank
+- View exam results for all assigned exams
 
-👨‍💼 Admin
-Manage Users (Students & Teachers)
-Create & Manage Exams
-Assign Subjects
-Monitor System Activity
-View Results & Analytics
+**Student**
+- Dashboard showing live and upcoming exams
+- Fullscreen-enforced exam session with per-student question shuffle
+- Colour-coded question navigator (Not Visited / Not Answered / Answered / Marked for Review / Answered & Marked)
+- Auto-save every 30 seconds; resumes if session is interrupted
+- Timer with warning colours; auto-submit on expiry
+- Result page with score, breakdown, and PDF download
+
+**Proctoring**
+- Fullscreen enforcement with grace-period modal on exit
+- Tab-switch detection
+- Copy/paste and right-click blocking
+- Keyboard shortcut blocking (F12, Ctrl+Shift+I, etc.)
+- DevTools size heuristic
+- Mouse-leave debounced detection
+- Configurable violation threshold → auto-submit
+
 ---
 
 ## 🛠️ Tech Stack
