@@ -2,30 +2,54 @@
 
 ## 📌 Project Overview
 
-Exam Nova is a full-stack **Online Examination System** designed to conduct, manage, and monitor exams efficiently. It provides a seamless interface for students and administrators with secure authentication and real-time exam handling.
+Exam Nova is a secure, LAN-based online examination platform with real-time proctoring, blueprint-driven exam generation, and scalable multi-user support.
+
+Designed for institutions to conduct exams over a local network (LAN) without requiring internet connectivity.
+
+---
+## Key Highlights
+- Secure JWT-based authentication system
+- Blueprint-driven exam generation engine
+- Real-time evaluation with subject-wise analytics
+- Bulk question upload via Excel (Apache POI)
+- Timed exams with auto-save and resume support
+- Advanced proctoring with violation detection & auto-submit
+- LAN-based deployment (no internet required)
 
 ---
 
 ## 🚀 Features
 
-👨‍🎓 Student
-Register & Login
-Attempt Exams
-Auto-submit on time expiry
-View Results
-Anti-cheating features (tab switch detection, right-click disable)
+**Admin**
+- Platform overview (student, teacher, and subject counts)
+- Approve pending teacher accounts
+- Create and manage subjects
+- Build exam blueprints (subject → question count → marks/negatives)
+- Create and publish exams with scheduled start/end windows
+- View all student results with subject-wise breakdown and violation logs
 
-👩‍🏫 Teacher
-Upload Questions (Subject-wise)
-Manage Question Bank
-View Student Results
+**Teacher**
+- Upload questions manually or via `.xlsx` bulk upload (Apache POI)
+- Browse and manage per-subject question bank
+- View exam results for all assigned exams
 
-👨‍💼 Admin
-Manage Users (Students & Teachers)
-Create & Manage Exams
-Assign Subjects
-Monitor System Activity
-View Results & Analytics
+**Student**
+- Dashboard showing live and upcoming exams
+- Fullscreen-enforced exam session with per-student question shuffle
+- Colour-coded question navigator (Not Visited / Not Answered / Answered / Marked for Review / Answered & Marked)
+- Auto-save every 30 seconds; resumes if session is interrupted
+- Timer with warning colours; auto-submit on expiry
+- Result page with score, breakdown, and PDF download
+
+**Proctoring**
+- Fullscreen enforcement with grace-period modal on exit
+- Tab-switch detection
+- Copy/paste and right-click blocking
+- Keyboard shortcut blocking (F12, Ctrl+Shift+I, etc.)
+- DevTools size heuristic
+- Mouse-leave debounced detection
+- Configurable violation threshold → auto-submit
+
 ---
 
 ## 🛠️ Tech Stack
@@ -47,6 +71,36 @@ View Results & Analytics
 * PostgreSQL
 
 ---
+## 📂 Project Structure
+
+```
+backend/
+├── src/main/java/com/examportal/
+│   ├── auth/          # JWT service, filter, login/register
+│   ├── user/          # User entity, roles (ADMIN, TEACHER, STUDENT)
+│   ├── subject/       # Subject CRUD
+│   ├── question/      # Question bank, Excel upload
+│   ├── exam/          # Blueprint, Exam, publish engine
+│   ├── attempt/       # Exam session, autosave, submit
+│   ├── evaluation/    # Marking, result storage
+│   ├── proctor/       # Violation tracking, auto-submit
+│   ├── reporting/     # iText7 PDF generation
+│   ├── admin/         # Stats, teacher approval
+│   └── common/        # ApiResponse, GlobalExceptionHandler
+└── src/main/resources/
+│    ├── application.yml
+│    └── db/schema.sql
+└── .env
+
+frontend/
+└── src/
+    ├── api/           # axiosConfig, authApi, examApi, attemptApi, adminApi
+    ├── context/       # AuthContext (JWT storage)
+    ├── hooks/         # useTimer, useViolationDetector
+    ├── pages/         # LoginPage, StudentDashboard, ExamPage, ResultPage,
+    │                  # TeacherDashboard, AdminDashboard
+    └── components/    # ExamResultsViewer, Spinner, Badge
+```
 
 ## ⚙️ Installation & Setup
 
@@ -84,6 +138,7 @@ npm start
 
 ---
 
+
 ## 🤝 Contributing
 
 Pull requests are welcome. For major changes, please open an issue first.
@@ -95,10 +150,6 @@ Pull requests are welcome. For major changes, please open an issue first.
 This project is licensed under the MIT License.
 
 ---
-
-## 📂 Project Structure
-
-<img width="899" height="254" alt="image" src="https://github.com/user-attachments/assets/f25aac36-a383-486d-8b0e-a71d9f34d305" />
 
 
 ## 👨‍💻 Author
