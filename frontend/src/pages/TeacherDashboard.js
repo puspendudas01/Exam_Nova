@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { getSubjects, getQuestions, uploadQuestion } from '../api/adminApi';
 import ExamResultsViewer from '../components/ExamResultsViewer';
 import Spinner from '../components/Spinner';
+import api from '../api/axiosConfig';
 
 const EMPTY_FORM = {
   questionText: '',
@@ -33,6 +34,27 @@ export default function TeacherDashboard() {
   const [teacherTab, setTeacherTab] = useState('Questions'); // 'Questions' | 'Results'
   const [questionFile, setQuestionFile] = useState(null);
 
+  useEffect(() => {
+  const handleBack = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch (e) {
+      console.warn("Logout failed");
+    }
+
+    localStorage.removeItem("examportal_user");
+    localStorage.removeItem("exam_active");
+
+    window.location.href = "/login";
+  };
+
+  window.history.pushState(null, "", window.location.href);
+  window.addEventListener("popstate", handleBack);
+
+  return () => {
+    window.removeEventListener("popstate", handleBack);
+  };
+}, []);
   useEffect(() => {
     getSubjects().then(r => setSubjects(r.data.data || [])).catch(() => { });
   }, []);
@@ -92,55 +114,54 @@ export default function TeacherDashboard() {
 
   /* ---------------- EXCEL UPLOAD ---------------- */
 
-  const handleUploadQuestions = async (e) => {
+ const handleUploadQuestions = async (e) => {
 
-    e.preventDefault();
-    setMsg('');
+  e.preventDefault();
+  setMsg('');
 
-    if (!questionFile) {
-      setMsg('Please select an Excel file.');
-      return;
+  if (!questionFile) {
+    setMsg('Please select an Excel file.');
+    return;
+  }
+
+  try {
+
+    const formData = new FormData();
+    formData.append('file', questionFile);
+
+    const res = await api.post('/questions/excel', formData);
+
+    const data = res.data;
+
+    setMsg(data.message || 'Questions uploaded successfully.');
+    setQuestionFile(null);
+
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) fileInput.value = '';
+
+    if (selectedSubject) {
+      loadQuestions(selectedSubject);
     }
 
-    try {
-
-      const formData = new FormData();
-      formData.append('file', questionFile);
-
-      // Use axiosConfig so the JWT token is injected automatically
-      // and the proxy routes correctly to the backend
-      const stored = localStorage.getItem('examportal_user');
-      const token = stored ? JSON.parse(stored).token : null;
-
-      const res = await fetch('/questions/excel', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(data.message || `Server error: ${res.status}`);
-      }
-
-      setMsg((data.message || 'Questions uploaded successfully.'));
-      setQuestionFile(null);
-      // Reset file input
-      const fileInput = document.querySelector('input[type="file"]');
-      if (fileInput) fileInput.value = '';
-
-      if (selectedSubject) {
-        loadQuestions(selectedSubject);
-      }
-
-    } catch (err) {
-      setMsg('Upload failed: ' + (err.message || 'Unknown error. Check the file format.'));
-    }
-  };
+  } catch (err) {
+    setMsg('Upload failed: ' + (err.response?.data?.message || 'Unknown error.'));
+  }
+};
 
   const inp = { width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 5, fontSize: 13 };
   const lbl = { fontSize: 12, fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: 5 };
+  
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch (e) {
+        console.warn("Logout API failed");
+      }
+
+   localStorage.removeItem("exam_active");
+   logout();
+   navigate('/login');
+ };
 
   return (
 
@@ -164,7 +185,7 @@ export default function TeacherDashboard() {
           </span>
 
           <button
-            onClick={() => { logout(); navigate('/login'); }}
+            onClick={() => { handleLogout(); }}
             style={{ padding: '6px 14px', border: '1px solid var(--border)', borderRadius: 6, background: '#fff', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 13 }}
           >
             Sign out

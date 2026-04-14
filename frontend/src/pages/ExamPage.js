@@ -111,7 +111,12 @@ export default function ExamPage() {
 
   const autoSaveRef   = useRef(null);
   const startedRef    = useRef(false);
+  const [snackbar, setSnackbar] = useState("");
 
+  const showSnackbar = (msg) => {
+  setSnackbar(msg);
+  setTimeout(() => setSnackbar(""), 2000);
+};
   /* ── LOAD SESSION ───────────────────────────────────────────── */
   useEffect(() => {
     if (startedRef.current) return;
@@ -215,13 +220,28 @@ export default function ExamPage() {
     session ? session.timeRemainingSeconds : null,
     doSubmit
   );
-
+  useEffect(() => {
+  const handleUnload = () => {
+    localStorage.removeItem("exam_active");
+  };
+  window.addEventListener("beforeunload", handleUnload);
+  return () => {
+    window.removeEventListener("beforeunload", handleUnload);
+    localStorage.removeItem("exam_active");
+  };
+}, []);
+  useEffect(() => {
+  return () => {
+    localStorage.removeItem("exam_active");
+  };
+}, []);
   /* ── VIOLATION DETECTOR ─────────────────────────────────────── */
   useViolationDetector(
     session?.attemptId,
     !!session,
     doSubmit,           // onAutoSubmit (hard violations)
-    handleFullscreenExit // onFullscreenExit (grace modal)
+    handleFullscreenExit,
+    showSnackbar
   );
 
   const handleAnswer = (qId, optIdx) =>
@@ -516,6 +536,13 @@ export default function ExamPage() {
             </div>
           </div>
         </div>
+      )}
+      
+    {/*  SNACKBAR  */}
+      {snackbar && (
+      <div className="snackbar show">
+      {snackbar}
+       </div>
       )}
     </div>
   );
