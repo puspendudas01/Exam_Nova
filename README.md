@@ -74,7 +74,7 @@ Designed for institutions to conduct exams over a local network (LAN) without re
 ## 📂 Project Structure
 
 ```
-backend_final/
+backend/
 ├── src/main/java/com/examportal/
 │   ├── auth/          # JWT service, filter, login/register
 │   ├── user/          # User entity, roles (ADMIN, TEACHER, STUDENT)
@@ -88,10 +88,11 @@ backend_final/
 │   ├── admin/         # Stats, teacher approval
 │   └── common/        # ApiResponse, GlobalExceptionHandler
 └── src/main/resources/
-    ├── application.yml
-    └── db/schema.sql
+│    ├── application.yml
+│    └── db/schema.sql
+└── .env
 
-frontend_final/
+frontend/
 └── src/
     ├── api/           # axiosConfig, authApi, examApi, attemptApi, adminApi
     ├── context/       # AuthContext (JWT storage)
