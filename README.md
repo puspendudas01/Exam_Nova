@@ -71,6 +71,35 @@ Designed for institutions to conduct exams over a local network (LAN) without re
 * PostgreSQL
 
 ---
+## 📂 Project Structure
+
+```
+backend_final/
+├── src/main/java/com/examportal/
+│   ├── auth/          # JWT service, filter, login/register
+│   ├── user/          # User entity, roles (ADMIN, TEACHER, STUDENT)
+│   ├── subject/       # Subject CRUD
+│   ├── question/      # Question bank, Excel upload
+│   ├── exam/          # Blueprint, Exam, publish engine
+│   ├── attempt/       # Exam session, autosave, submit
+│   ├── evaluation/    # Marking, result storage
+│   ├── proctor/       # Violation tracking, auto-submit
+│   ├── reporting/     # iText7 PDF generation
+│   ├── admin/         # Stats, teacher approval
+│   └── common/        # ApiResponse, GlobalExceptionHandler
+└── src/main/resources/
+    ├── application.yml
+    └── db/schema.sql
+
+frontend_final/
+└── src/
+    ├── api/           # axiosConfig, authApi, examApi, attemptApi, adminApi
+    ├── context/       # AuthContext (JWT storage)
+    ├── hooks/         # useTimer, useViolationDetector
+    ├── pages/         # LoginPage, StudentDashboard, ExamPage, ResultPage,
+    │                  # TeacherDashboard, AdminDashboard
+    └── components/    # ExamResultsViewer, Spinner, Badge
+```
 
 ## ⚙️ Installation & Setup
 
@@ -108,6 +137,7 @@ npm start
 
 ---
 
+
 ## 🤝 Contributing
 
 Pull requests are welcome. For major changes, please open an issue first.
@@ -119,10 +149,6 @@ Pull requests are welcome. For major changes, please open an issue first.
 This project is licensed under the MIT License.
 
 ---
-
-## 📂 Project Structure
-
-<img width="899" height="254" alt="image" src="https://github.com/user-attachments/assets/f25aac36-a383-486d-8b0e-a71d9f34d305" />
 
 
 ## 👨‍💻 Author
