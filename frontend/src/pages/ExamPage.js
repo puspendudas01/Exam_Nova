@@ -144,33 +144,6 @@ export default function ExamPage() {
     enter();
   }, [session]);
 
-  /* ── DISABLE RIGHT & MIDDLE CLICK DURING EXAM ───────────────── */
-  useEffect(() => {
-    if (!session) return;
-
-    const handleContextMenu = (e) => {
-      e.preventDefault();
-      e.stopPropagation(); // 🔥 IMPORTANT
-      return false;
-    };
-
-    const handleMouseDown = (e) => {
-      if (e.button === 1 || e.button === 2) {
-        e.preventDefault();
-        e.stopPropagation(); // 🔥 IMPORTANT
-      }
-    };
-
-    // 🔥 CAPTURE PHASE (VERY IMPORTANT)
-    document.addEventListener("contextmenu", handleContextMenu, true);
-    document.addEventListener("mousedown", handleMouseDown, true);
-
-    return () => {
-      document.removeEventListener("contextmenu", handleContextMenu, true);
-      document.removeEventListener("mousedown", handleMouseDown, true);
-    };
-  }, [session]);
-
   /* ── SUBMIT ──────────────────────────────────────────────────── */
   const doSubmit = useCallback(async () => {
     if (!session || submitting) return;

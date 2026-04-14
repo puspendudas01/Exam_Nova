@@ -11,9 +11,6 @@ import TeacherDashboard from './pages/TeacherDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 
 export default function App() {
-
-
-
   return (
     <AuthProvider>
       <BrowserRouter>
