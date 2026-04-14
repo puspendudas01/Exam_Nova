@@ -2,7 +2,11 @@
 
 ## 📌 Project Overview
 
-Exam Nova is a full-stack **Online Examination System** designed to conduct, manage, and monitor exams efficiently. It provides a seamless interface for students and administrators with secure authentication and real-time exam handling.
+Exam Nova is a secure, LAN-based online examination platform with real-time proctoring, blueprint-driven exam generation, and scalable multi-user support.
+
+Designed for institutions to conduct exams over a local network (LAN) without requiring internet connectivity.
+
+
 
 ---
 
