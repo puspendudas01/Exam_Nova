@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getActiveExams, getUpcomingExams } from '../api/examApi';
+import BrandLogo from '../components/BrandLogo';
 import Spinner from '../components/Spinner';
 import api from '../api/axiosConfig';
+import { runLogoutFlow } from '../utils/authSession';
 
 export default function StudentDashboard() {
   const { user, logout } = useAuth();
@@ -14,16 +16,12 @@ export default function StudentDashboard() {
   
   useEffect(() => {
   const handleBack = async () => {
-    try {
-      await api.post("/auth/logout");
-    } catch (e) {
-      console.warn("Logout failed");
-    }
-
-    localStorage.removeItem("examportal_user");
-    localStorage.removeItem("exam_active");
-
-    window.location.href = "/login";
+    await runLogoutFlow({
+      apiClient: api,
+      logout,
+      onError: () => console.warn("Logout failed")
+    });
+    navigate('/login', { replace: true });
   };
 
   window.history.pushState(null, "", window.location.href);
@@ -32,7 +30,7 @@ export default function StudentDashboard() {
   return () => {
     window.removeEventListener("popstate", handleBack);
   };
-}, []);
+}, [logout, navigate]);
   useEffect(() => {
   const loadExams = async () => {
     try {
@@ -53,16 +51,13 @@ export default function StudentDashboard() {
 
 
   const handleLogout = async () => {
-    try {
-      await api.post("/auth/logout");
-    } catch (e) {
-        console.warn("Logout API failed");
-      }
-
-   localStorage.removeItem("exam_active");
-   logout();
-   navigate('/login');
- };
+    await runLogoutFlow({
+      apiClient: api,
+      logout,
+      onError: () => console.warn("Logout API failed")
+    });
+    navigate('/login');
+  };
 
   const formatDate = (dt) => dt ? new Date(dt).toLocaleString() : '-';
   const activeExams = exams.filter(e => new Date(e.scheduledStart) <= new Date());
@@ -72,10 +67,9 @@ export default function StudentDashboard() {
   <div style={{ minHeight:'100vh', background:'var(--bg)' }}>
 
     {/* Navbar */}
-    <div style={{ background:'#fff', borderBottom:'1px solid var(--border)', padding:'0 24px', height:56, display:'flex', alignItems:'center', justifyContent:'space-between', boxShadow:'var(--shadow-sm)' }}>
+    <div style={{ background:'#fff', borderBottom:'1px solid var(--border)', padding:'0 0px', height:56, display:'flex', alignItems:'center', justifyContent:'space-between', boxShadow:'var(--shadow-sm)' }}>
       <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-        <span style={{ fontSize:20 }}>📝</span>
-        <span style={{ fontWeight:700, fontSize:17, color:'var(--primary)' }}>ExamPortal</span>
+        <BrandLogo variant="text" width={140} />
       </div>
 
       <div style={{ display:'flex', alignItems:'center', gap:16 }}>

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { login } from '../api/authApi';
+import BrandLogo from '../components/BrandLogo';
 import Spinner from '../components/Spinner';
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ identifier: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login: authLogin } = useAuth();
@@ -13,12 +15,12 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login clicked");  // 🔥
+    console.log("Login clicked"); 
     setError('');setLoading(true);
     try {
-      console.log("Calling API...");  // 🔥
+      console.log("Calling API..."); 
       const res = await login(form);
-      console.log("Response:", res);  // 🔥
+      console.log("Response:", res);  
       const user = res.data.data;
       localStorage.setItem('examportal_user', JSON.stringify({
       token: user.token,
@@ -44,29 +46,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight:'100vh', background:'var(--bg)', display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+    <div style={{ minHeight:'100vh', background:'var(--bg)', display:'flex', alignItems:'center', justifyContent:'center', padding:10 }}>
       <div style={{ width:'100%', maxWidth:420 }}>
         <div style={{ textAlign:'center', marginBottom:32 }}>
-          <div style={{ display:'inline-flex', alignItems:'center', justifyContent:'center', width:52, height:52, background:'var(--primary)', borderRadius:12, marginBottom:14 }}>
-            <span style={{ fontSize:26, color:'#fff' }}>&#x1F4DD;</span>
+          <div style={{ display:'flex', justifyContent:'center', marginBottom:14 }}>
+            <BrandLogo variant="text" width={390} style={{ transform: 'translateX(-10px)' }} />
           </div>
-          <h1 style={{ fontSize:24, fontWeight:700, color:'var(--text-primary)' }}>ExamPortal</h1>
           <p style={{ color:'var(--text-muted)', marginTop:4 }}>Sign in to your account</p>
         </div>
 
         <div style={{ background:'#fff', borderRadius:12, boxShadow:'var(--shadow-md)', padding:32 }}>
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom:18 }}>
-              <label style={{ display:'block', fontSize:13, fontWeight:600, color:'var(--text-secondary)', marginBottom:6 }}>Email address</label>
-              <input type="email" value={form.email} onChange={e => setForm(f=>({...f,email:e.target.value}))}
-                required placeholder="you@example.com"
+              <label style={{ display:'block', fontSize:13, fontWeight:600, color:'var(--text-secondary)', marginBottom:6 }}>Enrollment No</label>
+              <input type="text" value={form.identifier} onChange={e => setForm(f=>({...f,identifier:e.target.value}))}
+                required placeholder=""
                 style={{ width:'100%', padding:'10px 12px', border:'1px solid var(--border)', borderRadius:6, fontSize:14, outline:'none' }} />
             </div>
             <div style={{ marginBottom:22 }}>
               <label style={{ display:'block', fontSize:13, fontWeight:600, color:'var(--text-secondary)', marginBottom:6 }}>Password</label>
-              <input type="password" value={form.password} onChange={e => setForm(f=>({...f,password:e.target.value}))}
-                required placeholder="••••••••"
-                style={{ width:'100%', padding:'10px 12px', border:'1px solid var(--border)', borderRadius:6, fontSize:14, outline:'none' }} />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={form.password}
+                onChange={e => setForm(f=>({...f,password:e.target.value}))}
+                required
+                placeholder=""
+                style={{ width:'100%', padding:'10px 12px', border:'1px solid var(--border)', borderRadius:6, fontSize:14, outline:'none' }}
+              />
+              <label style={{ display:'inline-flex', alignItems:'center', gap:8, marginTop:8, fontSize:12, color:'var(--text-secondary)', cursor:'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={e => setShowPassword(e.target.checked)}
+                />
+                {showPassword ? 'Hide password' : 'Show password'}
+              </label>
             </div>
             {error && (
               <div style={{ background:'#fef2f2', border:'1px solid #fecaca', color:'var(--danger)', padding:'10px 14px', borderRadius:6, fontSize:13, marginBottom:16 }}>
