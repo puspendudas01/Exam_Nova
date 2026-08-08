@@ -7,7 +7,7 @@ Exam Nova is a secure, LAN-based online examination platform with real-time proc
 Designed for institutions to conduct exams over a local network (LAN) without requiring internet connectivity.
 
 ---
-## Key Highlights
+## Key Highlights :
 - Secure JWT-based authentication system
 - Blueprint-driven exam generation engine
 - Real-time evaluation with subject-wise analytics
